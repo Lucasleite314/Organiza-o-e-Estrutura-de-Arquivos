@@ -1,0 +1,79 @@
+import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
+
+//complexidade:
+
+// professor renato, na struct da questao o cpf estava como [15] mas quando fui fazer de fato, ele foi [14] e parti com esse detalhe
+//para fazer a questao , mas a questão nao mudaria , so o total de bytes da linha***
+
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		try{ 
+			FiltrarRegistros();
+			} catch(Exception e ) {
+				System.out.println("Não tem não erro nenhum :)");
+			}
+		
+	
+	}
+	
+	public static void FiltrarRegistros() throws Exception {
+		RandomAccessFile candidatos = new RandomAccessFile("C:/Users/Lucas/Desktop/Q2/fonte.dat","rwd");
+		RandomAccessFile candidatos2 = new RandomAccessFile("C:/Users/Lucas/Desktop/Q2/candidatos2.dat","rwd");
+		
+		
+		byte[] auxA = new byte[78];
+		//candidatos.readFully(auxRegistro);
+		
+		byte[] auxB = new byte[78];
+		
+		while(candidatos.getFilePointer() < candidatos.length()) {
+			
+			candidatos.readFully(auxA);			
+			String A  = ConverteBytesParaString(auxA);
+			
+			if(candidatos.length() - candidatos.getFilePointer() == 0 ) {
+			//	System.out.println("cheguei aqui");				
+				candidatos2.writeChars(A);
+				
+			}
+			else {
+				candidatos.readFully(auxB);
+				String B = ConverteBytesParaString(auxB);
+			
+				System.out.println(A);
+				System.out.println(B);
+			
+				boolean compStr = A.regionMatches(25, B, 25, 14);
+			
+			
+				if ( !compStr)  {  
+						candidatos2.writeChars(A);
+					}
+				
+				candidatos.seek(candidatos.getFilePointer()-78);
+			
+			}
+		}
+		
+
+		
+		System.out.println(candidatos.getFilePointer());
+		
+		
+		//System.out.println(candidatos.length());
+		//System.out.println(candidatos2.length());
+		
+		
+		
+		candidatos.close();
+		candidatos2.close();
+	}
+	
+	public static String ConverteBytesParaString(byte[] b){
+		return new String(b, StandardCharsets.UTF_8);  // tradutor byte pra string
+	}
+}
