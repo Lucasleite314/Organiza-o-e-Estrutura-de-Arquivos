@@ -1,5 +1,7 @@
 # Organizao-e-Estrutura-de-Arquivos
 
+Arquivo candidatos.dat lido para realizer a questão 2, o arquivo candidatos2.dat é o arquivo gerado pela questão
+
 Sobre a questão 2)
 O arquivo abaixo, em texto, usado para testar o código da questão 2. Os registros dos arquivos abaixo apresentam um tamanho fixo menor do que o registro utlizado na
 questão 2, porém a lógica está correta e a única mudança seria o tamanho do registro(este aqui com 78 bytes),e o tamanho do cpf(que no exemplo abaixo 
