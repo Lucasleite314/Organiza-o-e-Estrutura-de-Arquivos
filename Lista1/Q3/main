@@ -1,0 +1,127 @@
+package pacoteQ3;
+
+import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
+
+
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		try{ 
+			FiltrarRegistros();
+			} catch(Exception e ) {
+				//System.out.println("Não tem não erro nenhum :)");
+			}	
+	}
+	
+	public static void FiltrarRegistros() throws Exception {
+		RandomAccessFile candidatosA = new RandomAccessFile("C:/Users/Lucas/Desktop/Q3/candidatoA.dat","rwd");
+		RandomAccessFile candidatosB = new RandomAccessFile("C:/Users/Lucas/Desktop/Q3/candidatoB.dat","rwd");
+		RandomAccessFile candidatos2 = new RandomAccessFile("C:/Users/Lucas/Desktop/Q3/candidatos2.dat","rwd");
+		
+		byte[] auxA = new byte[78];	
+		
+		byte[] auxB = new byte[78];
+		
+		byte[] auxC = new byte[78];
+				
+		byte[] auxD = new byte[78];
+		
+		
+		
+		while(candidatosA.getFilePointer() < candidatosA.length() && candidatosB.getFilePointer() < candidatosB.length() ) {
+			
+			candidatosA.readFully(auxA);			
+			String A  = ConverteBytesParaString(auxA);
+			
+			candidatosB.readFully(auxC);			
+			String C  = ConverteBytesParaString(auxC);
+			
+			if(candidatosA.length() - candidatosA.getFilePointer() == 0 ) {
+			//	System.out.println("cheguei aqui");				
+				candidatos2.writeChars(A);
+				
+			}
+			else {
+				candidatosA.readFully(auxB);
+				String B = ConverteBytesParaString(auxB);
+			
+				//System.out.println(A);
+				//System.out.println(B);
+			
+				boolean compStr = A.regionMatches(25, B, 25, 14);
+			
+			
+				if ( !compStr)  {  
+						candidatos2.writeChars(A);
+						//System.out.println(A);
+						
+						boolean compStrB = A.regionMatches(25, C, 25, 14); // COMPARA COM B
+						
+						if (!compStrB) {
+							String str = A;
+						//	System.out.println(A);   // linha inteira, verificado
+							String email1 = str.substring(49,70);  // retira o email do espaço q ele pertence(mesmo tamanho e local em todos)
+							System.out.println(email1);
+							
+						}
+					}
+				
+				candidatosA.seek(candidatosA.getFilePointer()-78);				
+			
+			}
+			
+			if(candidatosB.length() - candidatosB.getFilePointer() == 0 ) {
+				//	System.out.println("cheguei aqui");				
+					candidatos2.writeChars(C);
+					
+				}
+				else {
+					candidatosB.readFully(auxD);
+					String D = ConverteBytesParaString(auxD);
+				
+					//System.out.println(C);
+					//System.out.println(D);
+				
+					boolean compStr = C.regionMatches(25, D, 25, 14);
+				
+				
+					if ( !compStr)  {  
+							candidatos2.writeChars(C);
+							//System.out.println(C);
+							
+							boolean compStrA = C.regionMatches(25, A, 25, 14); // COMPARA COM A
+							
+							if (!compStrA) {
+								
+								String str2 = C;
+								//System.out.println(C);   // linha inteira, verificado
+								String email2 = str2.substring(49,70);  // retira o email do espaço q ele pertence(mesmo tamanho e local em todos)
+								System.out.println(email2);
+								
+								
+							}
+						}
+					
+					candidatosB.seek(candidatosB.getFilePointer()-78);
+				
+				}
+		}
+		
+		
+		System.out.println(candidatosA.getFilePointer());
+		System.out.println(candidatosB.getFilePointer());
+			
+		
+		
+		candidatosA.close();
+		candidatosB.close();
+		candidatos2.close();
+	}
+	
+	public static String ConverteBytesParaString(byte[] b){
+		return new String(b, StandardCharsets.UTF_8);  // tradutor byte pra string
+	}
+}
