@@ -1,0 +1,76 @@
+import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
+
+
+// professor renato, na struct da questao o cpf estava como [15] mas quando fui fazer de fato, o tamanho do cpf acabou sendo de [14] (ex: 250.918.350-83) e resolvi a questão utilizando esse arquivo (coloquei no github o arquivo em questão tanto na versão binaria como em texto)
+
+// No caso, o tamanho da estrutura do arquivo que utilizei está menor que a da questão 2, ocupando um total de 78bytes por linha/registro. Porém acredito que a lógica do problema está resolvida, precisando apenas alterar o valor total de bytes por registro para funcionar com o exemplo da questão 2.
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		try{ 
+			FiltrarRegistros();
+			} catch(Exception e ) {
+				System.out.println("Não tem não erro nenhum :)");
+			}	
+	}
+	
+	public static void FiltrarRegistros() throws Exception {
+		RandomAccessFile candidatos = new RandomAccessFile("C:/Users/Lucas/Desktop/Q2/candidatos.dat","rwd");
+		RandomAccessFile candidatos2 = new RandomAccessFile("C:/Users/Lucas/Desktop/Q2/candidatos2.dat","rwd");
+		
+		
+		byte[] auxA = new byte[78];
+		//candidatos.readFully(auxRegistro);
+		
+		byte[] auxB = new byte[78];
+		
+		while(candidatos.getFilePointer() < candidatos.length()) {
+			
+			candidatos.readFully(auxA);			
+			String A  = ConverteBytesParaString(auxA);
+			
+			if(candidatos.length() - candidatos.getFilePointer() == 0 ) {
+			//	System.out.println("cheguei aqui");				
+				candidatos2.writeChars(A);
+				
+			}
+			else {
+				candidatos.readFully(auxB);
+				String B = ConverteBytesParaString(auxB);
+			
+				System.out.println(A);
+				System.out.println(B);
+			
+				boolean compStr = A.regionMatches(25, B, 25, 14);
+			
+			
+				if ( !compStr)  {  
+						candidatos2.writeChars(A);
+					}
+				
+				candidatos.seek(candidatos.getFilePointer()-78);
+			
+			}
+		}
+		
+
+		
+		System.out.println(candidatos.getFilePointer());
+		
+		
+		//System.out.println(candidatos.length());
+		//System.out.println(candidatos2.length());
+		
+		
+		
+		candidatos.close();
+		candidatos2.close();
+	}
+	
+	public static String ConverteBytesParaString(byte[] b){
+		return new String(b, StandardCharsets.UTF_8);  // tradutor byte pra string
+	}
+}
