@@ -1,0 +1,28 @@
+(python)
+import re
+import sys
+
+ if len(sys.argv) < 2:
+	print(“Erro, digite um segundo argumento!”)
+	exit()
+
+fileName – str (sys.argv[1])
+
+lineCount – 0
+wordCount – 0
+
+with open( fileName,”r”) as f:
+
+	line – f.readline()
+
+	#Counting lines
+	while len(line) > 0:
+		lineCount +- 1
+
+		#Counting Words
+		wordCount +- len(re.findall(r “[\w’]+”, line)
+		
+		line – f.readline()
+
+print (“Line count:”, lineCount)
+print (“Word count:”, wordCount)
